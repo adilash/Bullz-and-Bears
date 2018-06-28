@@ -1,0 +1,102 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-xs-12 col-md-12">
+
+			<div class="p+">
+
+				<div class="card customcard">
+
+		          	<lx-tabs lx-active-tab="active" lx-color="white">
+
+		              <lx-tab lx-label="Today's Leaders" >
+		                <div ng-scrollbars ng-scrollbars-config="dailyconfig">
+
+		                  <ul class="customlist">
+		                    <li class="customlist-item" ng-repeat="player in daily">
+
+		                      <div class="row center-xs middle-xs">
+		                        <div class="col-xs-12 col-md-2">
+		                            <p class="mg-1">{{$index+1}}</p>
+		                        </div>
+		                        <div class="col-xs-12 col-md">
+		                            <img class="prof-image" ng-src="https://graph.facebook.com/{{player.fbid}}/picture?height=100&width=100" />
+		                        </div>
+		                        <div class="col-xs-12 col-md">
+		                            <p class="blue">{{player.name}}</p>
+		                        </div>
+		                        <div class="col-xs-12 col-md">
+		                            <p class="mg-1">{{player.total|currency:'&#8377'}}</p>
+		                        </div>
+
+		                      </div>
+
+		                    </li>
+		              	  </ul>
+
+		                </div>
+		              </lx-tab>
+
+		              <lx-tab lx-label="This Week's Leaders">
+		                <div ng-scrollbars ng-scrollbars-config="weeklyconfig">
+
+		                  <ul class="customlist">
+		                    <li class="customlist-item" ng-repeat="player in weekly">
+
+		                      <div class="row center-xs middle-xs">
+		                        <div class="col-xs-12 col-md-2">
+		                            <p class=mg-1>{{$index+1}}</p>
+		                        </div>
+		                        <div class="col-xs-12 col-md">
+		                            <img class="prof-image" ng-src="https://graph.facebook.com/{{player.fbid}}/picture?height=100&width=100" />
+		                        </div>
+		                        <div class="col-xs-12 col-md">
+		                            <p class="blue">{{player.name}}</p>
+		                        </div>
+		                        <div class="col-xs-12 col-md">
+		                            <p class=mg-1>{{player.total|currency:'&#8377'}}</p>
+		                        </div>
+
+		                      </div>
+
+		                    </li>
+		              	  </ul>
+
+		                </div>
+		               </lx-tab>
+
+		              <lx-tab lx-label="Leaderboard">
+		                <div ng-scrollbars ng-scrollbars-config="overallconfig">
+
+		                  <ul class="customlist">
+		                    <li class="customlist-item" ng-repeat="player in overall">
+
+								<div class="row center-xs middle-xs">
+							   <div class="col-xs-12 col-md-2">
+								   <p class="mg-1">{{$index+1}}</p>
+							   </div>
+							   <div class="col-xs-12 col-md">
+								   <img class="prof-image" ng-src="https://graph.facebook.com/{{player.fbid}}/picture?height=100&width=100" />
+							   </div>
+							   <div class="col-xs-12 col-md">
+								   <p class="blue">{{player.name}}</p>
+							   </div>
+							   <div class="col-xs-12 col-md">
+								   <p class="mg-1">{{player.total|currency:'&#8377'}}</p>
+							   </div>
+
+							 </div>
+
+
+		                    </li>
+		              	  </ul>
+
+		                </div>
+		              </lx-tab>
+
+		          	</lx-tabs>
+	        	</div>
+
+			</div>
+		</div>
+	</div>
+</div>

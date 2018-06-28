@@ -1,0 +1,112 @@
+<div class="container-fluid">
+    <div class="p+">
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+
+                <div class="card customcard">
+                  <div class="p+">
+                      <div class="row around-xs middle-xs">
+                          <div class="col-xs center-xs">
+                              <img class="ava_pic" ng-src="https://graph.facebook.com/{{player.fbid}}/picture?height=200&width=200" />
+                          </div>
+                          <div class="col-xs">
+                              <h1>{{player.name}}</h1>
+                              <p class="small">Net Worth</p>
+                              <p class="large blue">{{player.networth|currency:"&#8377":2}}</p>
+                          </div>
+
+                      </div>
+                  </div>
+                </div>
+
+                <div class="card customcard">
+                  <div class="p+">
+                    <ul class="customlist">
+                      <li class="customlist-item">
+                        <div class="row center-xs">
+                          <div class="col-xs">
+                            <p class="small">Cash At Hand</p>
+                            <p class="main green">{{player.liquidcash|currency:"&#8377":2}}</p>
+                          </div>
+                          <div class="col-xs">
+                            <p class="small">Market Value</p>
+                            <p class="main green">{{player.marketvalue|currency:"&#8377":2}}</p>
+                          </div>
+                        </div>
+                      </li>
+
+                      <li class="customlist-item">
+
+                        <div class="row  center-xs">
+                          <div class="col-xs center-xs">
+                              <p class="small">Today's Gain</p>
+                              <p class="main"><pn-text value="player.daygain|number:2" is-percent="false" is-currency="true"></pn-text></p>
+                          </div>
+                          <div class="col-xs center-xs">
+                              <p class="small">Week's Gain</p>
+                              <p class="main"><pn-text value="player.weekgain|number:2" is-percent="false" is-currency="true"></pn-text></p>
+                          </div>
+                        </div>
+
+                      </li>
+
+                    </ul>
+
+                  </div>
+                </div>
+
+                <div class="card customcard">
+                  <div class="p+">
+                      <div class="p+">
+                          <p class="quote justify">"One of the funny things about the stock market is that every time one person buys,
+                               another sells, and both think they are astute."</p>
+                          <p class="quote right"> &nbsp-William Feather</p>
+                      </div>
+                  </div>
+              </div>
+
+            </div>
+            <div class="col-xs-12 col-md-6">
+
+                <div class="card customcard">
+                  <h3 style="text-align:center;margin-top:15px;">NSE</h3>
+                  <div class="p+">
+                        <canvas id="line" class="chart chart-line" chart-data="data"
+                        chart-labels="labels" chart-series="series" chart-options="options"
+                        chart-dataset-override="datasetOverride" chart-click="onClick"
+                        </canvas>
+                 </div>
+                </div>
+
+                <div class="card customcard">
+                    <div class="row middle-xs center-xs">
+                      <div class="col-xs-6 center-xs">
+                        <i style="font-size:6rem" class="mdi mdi-trophy red-amber" ></i>
+                      </div>
+
+                      <div class="col-xs-6">
+                        <ul class="customlist">
+                          <li class="customlist-item">
+                            <p class="small">Overall Rank</p>
+                            <p class="main red-amber">{{player.overallrank}}</p>
+                          </li>
+                          <li class="customlist-item">
+                            <p class="small">Daily Rank</p>
+                            <p class="main red-amber">{{player.dailyrank}}</p>
+                          </li>
+                          <li class="customlist-item">
+                            <p class="small">Weekly Rank</p>
+                            <p class="main red-amber">{{player.weeklyrank}}</p>
+                          </li>
+                        </ul>
+                      </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+  </div>
+</div>

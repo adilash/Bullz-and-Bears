@@ -16,11 +16,11 @@
               <div style="margin-top:25px">
                   <i style="font-size:6rem;" class="mdi mdi-heart-broken red-amber" ></i>
               </div>
-              <h3 class="red" style="margin:30px 0px;">Game is over. Thanks for playing.</h3>
-              <a href="./terms.pdf" class="btn btn--m btn--primary btn--raised" style="position: relative; overflow: hidden;">
+              <h3 class="red" style="margin:30px 0px;">Game is over.</h3>
+             <!-- <a href="./terms.pdf" class="btn btn--m btn--primary btn--raised" style="position: relative; overflow: hidden;">
                   <span class="ripple" style="height: 84px; width: 84px; top: -20px; left: -5px;"></span>
                   <span class="ng-scope">Terms and Conditions</span>
-              </a>
+              </a> -->
 
               <h2 style="margin:25px 0px">Winners - Away</h2>
               <div class="row center-xs">
@@ -71,10 +71,10 @@
                  </div>
              </div>
 
-            <a style="margin-top:15px" href="https://www.facebook.com/bullsnbearscommunity/" target="_blank" class="btn--fab btn btn--xl btn--primary" style="position: relative; overflow: hidden;">
+           <!-- <a style="margin-top:15px" href="" target="_blank" class="btn--fab btn btn--xl btn--primary" style="position: relative; overflow: hidden;">
              <span class="ripple" style="height: 36px; width: 36px; top: -1.60001px; left: -1.83331px;"></span>
              <i class="mdi mdi-facebook"></i>
-            </a>
+            </a> -->
              <p style="margin:20px 0 10px 0">&copy;  Creative and Intellectual minds of NIT Calicut </p>
 
 

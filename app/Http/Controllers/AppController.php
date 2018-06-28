@@ -11,8 +11,8 @@ use App\Winner;
 class AppController extends Controller
 {
     // serves views according to state.
-
-    public function index() {
+   
+   public function index() {
         $state = AppState::find(1);
 
         switch($state->state){

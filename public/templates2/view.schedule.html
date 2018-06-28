@@ -1,0 +1,203 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12 col-md-6">
+
+      <div class="p+">
+
+        <div class="card customcard formpage">
+
+          <h3>Schedule Transaction</h3>
+          
+          <div>
+            <form name="trade">
+
+              <lx-select ng-model="selectedTradeOption"
+                 lx-allow-clear="true"
+                 lx-choices="options"
+                 lx-display-filter="false"
+                 lx-fixed-label="true"
+                 lx-theme="dark"
+                 lx-label="Select Transation Option"
+                 ng-change="typeChange()">
+                  <lx-select-selected>
+                      {{ $selected.option }}
+                  </lx-select-selected>
+
+                  <lx-select-choices>
+                      {{ $choice.option }}
+                  </lx-select-choices>
+              </lx-select>
+              
+              <!-- lx-filter wasn't working -->
+              <lx-select ng-model="selectedStock"
+                ng-show="selectedTradeOption!=null"
+                 lx-allow-clear="true"
+                 lx-choices="filteredStocks"
+                 lx-display-filter="true"
+                 lx-fixed-label="true"
+                 lx-theme="dark"
+                 lx-label="Select a Stock"
+                 ng-change="changeStock()"
+                 ng-disabled="filteredStocks.length==0">
+                  <lx-select-selected>
+                      {{ $selected.name }}
+                  </lx-select-selected>
+
+                  <lx-select-choices>
+                      {{ $choice.name }}
+                  </lx-select-choices>
+              </lx-select>
+              
+              
+
+              <p class="text-field-error" ng-show="filteredStocks.length==0">You have no stock to {{selectedTradeOption.option}}</p>
+
+              <div  ng-show="selectedStock!=null">
+
+                <p style="margin-top:25px">Value : {{value|currency:"&#8377"}} </p>
+                <p >Maximum Amount permitted : {{maxAmount}} </p>
+
+                <lx-text-field
+                  lx-label="Amount"
+                  lx-theme="dark"
+                  lx-error="trade.amount.$invalid">
+                  <input type="text" name="amount" ng-model="state.tAmount" ng-pattern="/^[0-9]+$/">
+                </lx-text-field>
+                <span class="text-field-error" ng-if="trade.amount.$dirty && !trade.amount.$valid">Invalid Amount</span>
+                
+                <lx-text-field
+                  lx-label="Value"
+                  lx-theme="dark"
+                  lx-error="trade.amount.$invalid">
+                  <input type="text" name="sPrice" ng-model="state.sPrice" ng-pattern="/^[0-9]*(\.[0-9][0-9]?)?$/">
+                </lx-text-field>
+                <span class="text-field-error" ng-if="trade.sPrice.$dirty && !trade.sPrice.$valid">Invalid Value</span>
+                
+                
+                <div class="row  middle-xs center-xs" style="margin-top:20px">
+                    <div class="col-xs">
+                      <p class="super">Total</p>
+                      <p class="l">{{total|currency:"&#8377"}}</p>
+                    </div>
+                    <div class="col-xs">
+                        <lx-button ng-click="doTrade()" 
+                        	lx-size="l" 
+                        	lx-type="raised" 
+                        	ng-disabled="!state.tAmount || !trade.amount.$valid || !trade.sPrices.$valid">
+                        	{{selectedTradeOption.option}}
+                        </lx-button>
+                    </div>
+                </div>
+
+              </div>
+
+            </form>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!--  div layout="column" layout-align="center center" style="margin-top:20px">
+<md-whiteframe class="md-whiteframe-z1" style="width: 90%;background:#eeeeee" >
+    <div class="container-fluid">
+        <p style="text-align: center;padding-top: 20px;font-size: 20px"> Schedule Transaction </h1>
+        <form name="schedule">
+        <div class="row">
+
+            <div class="col-md-10 col-md-offset-1">
+                <md-select placeholder="Select a Transaction Type" name="transactionType" ng-model="transactionType" ng-change="typeChange()">
+                    <md-option value="Buy">Buy</md-option>
+                    <md-option value="Sell">Sell</md-option>
+                    <md-option value="Short">Short Sell</md-option>
+                    <md-option value="Cover">Cover</md-option>
+                </md-select>
+
+                <md-select placeholder="Select a Stock" name="selectedStock"  ng-show="transactionType!=null" ng-model="selectedStock" ng-change="changeStock()">
+                    <md-option ng-repeat="stock in stocks|filter:filterStocks" ng-value="{{stock}}">{{stock.name}}</md-option>
+                </md-select>
+               <p ng-show="noStocks">You have no stock to {{transactionType}}</p>
+
+            </div>
+        </div>
+
+        <div class="row" ng-show="selectedStock!=null">
+
+            <div class="col-md-10 col-md-offset-1" >
+                <p class="big">Value:{{value|currency:"&#8377"}} </p>
+                <p class="big">Maximum Amount permitted : {{maxAmount}} </p>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+                    <md-icon class="schedule-icon" md-svg-src="images/icons/commerce.svg" ></md-icon>
+
+                    <md-input-container style="margin-left: 24px;">
+                       <label>Amount</label>
+                       <input ng-model="scheduledAmount" name="scheduledAmount" required ng-pattern="/^[0-9]+$/">
+                       <div ng-messages="schedule.scheduledAmount.$error" ng-show="schedule.scheduledAmount.$dirty && !schedule.scheduledAmount.$valid">
+                        <div ng-message="pattern">Invalid Amount</div>
+
+                      </div>
+                     </md-input-container>
+                    </div>
+                    <div class="col-md-6">
+                    <md-icon class="schedule-icon" md-svg-src="images/icons/moneybag.svg" ></md-icon>
+                      <md-input-container style="margin-left: 24px;">
+                        <label>Value</label>
+                        <input ng-model="scheduledPrice" required name="scheduledPrice" ng-pattern="/^[0-9]*(\.[0-9][0-9]?)?$/">
+                        <div ng-messages="schedule.scheduledPrice.$error" ng-show="schedule.scheduledPrice.$dirty && !schedule.scheduledPrice.$valid">
+                        <div ng-message="pattern">Invalid Amount</div>
+
+                      </div>
+                      </md-input-container>
+                    </div>
+
+                </div>
+
+
+                <p class="big">Total : {{total|currency:"&#8377"}}</p>
+
+                <div class="commonbtn-container">
+                    <md-button class="md-raised" ng-disabled="!schedule.scheduledAmount.$valid || !schedule.scheduledPrice.$valid || isScheduling"
+                            ng-click="scheduleTransaction()">Schedule</md-button>
+
+                    <div ng-show="isScheduling">
+                         <md-progress-circular class="md-accent md-hue-1" md-mode="indeterminate" ></md-progress-circular>
+                    </div>
+
+                </div>
+
+
+
+                 </div>
+
+        </div>
+        </form>
+
+
+
+    </div>
+
+
+
+
+    <div>
+
+    </div>
+
+
+
+
+</md-whiteframe>
+
+    <md-button class="md-raised" ng-click="navigateToScheduled()">Show Scheduled Transactions</md-button>
+
+</div-->

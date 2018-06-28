@@ -1,0 +1,52 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-xs-12 col-md-12">
+
+			<div class="p+">
+
+				<div class="card customcard formpage">
+
+				<lx-text-field
+                  lx-label="Search"
+                  lx-theme="dark">
+                  <input type="text" name="name" ng-model="state.name">
+                </lx-text-field>
+            	<div ng-scrollbars ng-scrollbars-config="scrollconfig">
+                <ul class="customlist">
+                    <li class="customlist-item" ng-repeat="stock in stocks | filter:state.name">
+                      <div class="row">
+                        <div class="col-xs">
+                          <p class="large blue">{{stock.name}}</p>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xs-12 col-md-4">
+                            <p>Value : {{stock.value |currency:"&#8377" }}</p>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <p>Day High: {{stock.dayhigh|currency:"&#8377"}}</p>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <p>Day Low: {{stock.daylow|currency:"&#8377"}}</p>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <p>Week High: {{stock.weekhigh|currency:"&#8377"}}</p>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <p>Week Low: {{stock.weeklow|currency:"&#8377"}}</p>
+                        </div>
+                         <div class="col-xs-12 col-md-4">
+                            <p>Change: <pn-text value="stock.change_perc" is-percent="true" is-currency="false"></pn-text></p>
+                        </div>
+
+                      </div>
+
+                    </li>
+                 </ul>
+
+				</div>
+			 </div>
+			</div>
+		</div>
+	</div>
+</div>

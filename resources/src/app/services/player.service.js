@@ -10,14 +10,7 @@
         method: 'POST',
         cache: false,
         isArray: false
-      },
-      getTimeLeft : {
-          method: 'GET',
-          cache: false,
-          isArray: false,
-          url : './api/secsleft'
       }
-
 
     });
   });

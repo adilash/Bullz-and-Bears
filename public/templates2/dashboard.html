@@ -1,0 +1,58 @@
+<div class="header">
+  <div class="toolbar">
+    <div `class="toolbar__left mr++">
+      <lx-button class="navbtn" lx-size="l" lx-color="white" lx-type="icon" ng-click="toggle()">
+        <i class="mdi mdi-menu"></i>
+      </lx-button>
+    </div>
+    <span class="toolbar__label fs-title">Bulls n Bears</span>
+
+
+    <div class="toolbar__right">
+
+      <div class="msg"></div>
+
+      <lx-dropdown lx-position="right" lx-over-toggle="true">
+        <lx-dropdown-toggle>
+          <lx-button lx-size="l" lx-color="white" lx-type="icon">
+            <i class="mdi mdi-dots-vertical"></i>
+          </lx-button>
+        </lx-dropdown-toggle>
+
+        <lx-dropdown-menu>
+          <ul>
+            <li>
+              <a class="dropdown-link" ng-click="share();">Share on facebook</a>
+            </li>
+            <li>
+              <a class="dropdown-link" href="http://tathva.org" target="_blank">visit tathva.org</a>
+            </li>
+          </ul>
+        </lx-dropdown-menu>
+      </lx-dropdown>
+    </div>
+  </div>
+</div>
+
+<div class="sidebar" ng-class="{'sidebar-closed': !isOpen}">
+  <div flex-container="row" flex-wrap>
+    <div flex-item="12">
+
+      <ul class="menu">
+        <li ng-repeat="item in menu" class="menu-item">
+          <a ng-click="go(item)"><i class="mdi {{item.img}}" ></i>
+          {{ item.name }}
+          </a>
+
+        </li>
+        <li class="menu-item"><a ng-click="logout()"><i class="mdi mdi-logout" ></i> Log Out</a></li>
+      </ul>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="maincontainer" ng-class="{'main-sidebar-closed': !isOpen}">
+  <div class="viewcontainer" ui-view></div>
+</div>

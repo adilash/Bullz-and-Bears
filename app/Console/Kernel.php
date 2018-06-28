@@ -29,8 +29,7 @@ class Kernel extends ConsoleKernel
         Commands\WeekUpdate::class,
         Commands\InitStocks::class,
         Commands\HitBack::class,
-        Commands\Simulate::class,
-        Commands\Rollback::class
+        Commands\Simulate::class
     ];
 
     /**
@@ -47,7 +46,19 @@ class Kernel extends ConsoleKernel
         if($now->gt($end)){
             return; // Game Ended.
         }
+	$schedule->command('update:initStocks')->when(function()
+        {
+            
+            if(Stock::count())
+            {
+                return false;
+            }
+            else
+            {
+                return true; 
+            }
 
+        });
         $schedule->command('update:stocks')->everyMinute()->timezone($timezone);
         $schedule->command('update:daystart')->dailyAt('9:00')->timezone($timezone);
         $schedule->command('update:dayend')->dailyAt('16:00')->timezone($timezone);

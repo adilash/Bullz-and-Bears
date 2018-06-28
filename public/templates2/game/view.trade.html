@@ -1,0 +1,120 @@
+<div class="container-fluid">
+ <div class="p+">
+  <div class="row">
+    <div class="col-xs-12 col-md-6">
+
+        <div class="card customcard mincard">
+
+          <h3>Trade</h3>
+
+          <p class="status" ng-hide="isLive">
+              The Market is now closed. <br/>
+              The Market is open from 9:30 AM - 3:30 PM on all weekdays except public holidays.
+              Happy Trading!!
+          </p>
+
+          <div class="formpage" ng-show="isLive">
+            <form name="trade">
+
+              <lx-select ng-model="selectedTradeOption"
+                 lx-allow-clear="true"
+                 lx-choices="options"
+                 lx-display-filter="false"
+                 lx-fixed-label="true"
+                 lx-theme="dark"
+                 lx-label="Select Transation Option"
+                 ng-change="typeChange()">
+                  <lx-select-selected>
+                      {{ $selected.option }}
+                  </lx-select-selected>
+
+                  <lx-select-choices>
+                      {{ $choice.option }}
+                  </lx-select-choices>
+              </lx-select>
+
+              <!-- lx-filter wasn't working -->
+              <lx-select ng-model="selectedStock"
+                ng-show="selectedTradeOption!=null"
+                 lx-allow-clear="true"
+                 lx-choices="filteredStocks"
+                 lx-display-filter="true"
+                 lx-fixed-label="true"
+                 lx-theme="dark"
+                 lx-label="Select a Stock"
+                 ng-change="changeStock()"
+                 ng-disabled="filteredStocks.length==0">
+                  <lx-select-selected>
+                      {{ $selected.name }}
+                  </lx-select-selected>
+
+                  <lx-select-choices>
+                      {{ $choice.name }}
+                  </lx-select-choices>
+              </lx-select>
+
+              <p class="text-field-error" ng-show="filteredStocks.length==0">You have no stock to {{selectedTradeOption.option}}</p>
+
+              <div  ng-show="selectedStock!=null">
+
+                <p style="margin-top:25px">Value : {{value|currency:"&#8377"}} </p>
+                <p >Maximum Amount permitted : {{maxAmount}} </p>
+
+                <lx-text-field
+                  lx-label="Amount"
+                  lx-theme="dark"
+                  lx-error="trade.amount.$invalid">
+                  <input type="text" name="amount" ng-model="state.tAmount" ng-pattern="/^[0-9]+$/">
+                </lx-text-field>
+                <span class="text-field-error" ng-if="trade.amount.$dirty && !trade.amount.$valid">Invalid Amount</span>
+                <div class="row  middle-xs center-xs" style="margin-top:20px">
+                    <div class="col-xs">
+                      <p class="super">Total</p>
+                      <p class="l">{{total|currency:"&#8377"}}</p>
+                    </div>
+                    <div class="col-xs">
+
+                            <loading-button
+                              ng-click="doTrade()"
+                              lx-type="raised"
+                              lx-size="l"
+                              lx-diameter="70"
+                              value="{{selectedTradeOption.option}}"
+                              is-loading="isLoading"
+                              disable-criteria="!state.tAmount || !trade.amount.$valid"
+                              >
+                            </loading-button>
+
+
+
+
+                    </div>
+                </div>
+
+              </div>
+
+            </form>
+
+          </div>
+
+        </div>
+
+    </div>
+    <div class="col-xs-12 col-md-6">
+        <div class="card customcard mincard">
+          <h3>Stats</h3>
+          <p class="status" ng-show="chartDataLoaded && !piedata">
+              No trade has happened today.
+          </p>
+
+          <div class="chart-container">
+              <canvas id="pie" class="chart chart-doughnut"
+                chart-data="piedata"
+                chart-colours="colors"
+                chart-labels="labels" chart-options="chartOptions">
+              </canvas>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>

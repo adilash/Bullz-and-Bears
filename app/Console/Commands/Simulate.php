@@ -4,20 +4,11 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
+use App\User;
+use App\History;
+use App\ShortSell;
 use DB;
 
-use App\Stock;
-use App\History;
-use App\BoughtStock;
-use App\ShortSell;
-use App\User;
-use App\Schedules;
-
-use Carbon\Carbon;
-
-use App\Transaction;
-use Auth;
-use Artisan;
 
 class Simulate extends Command
 {
@@ -56,27 +47,22 @@ class Simulate extends Command
 
       $this->info("Simulating Game..");
 
-      
-
-     /* DB::transaction(function(){
+      DB::transaction(function(){
 
         $start_money = config('bullz.start_money');
         $brokerage = 0.002;
         DB::statement("DELETE FROM `bought_stocks` WHERE 1");
         DB::statement("DELETE FROM `short_sell` WHERE 1");
-    	DB::statement("UPDATE `users` SET liquidcash = '{$start_money}', marketvalue = 0;");
-    	DB::statement("UPDATE `users` SET liquidcash = liquidcash -  COALESCE((SELECT SUM(ROUND(amount * value * (1 + $brokerage),2)) FROM history WHERE history.playerid = users.id and transaction_type = 'Buy' GROUP BY history.playerid), 0)");
-        DB::statement("UPDATE `users` SET liquidcash = liquidcash + COALESCE((SELECT SUM(ROUND(amount * value * (1 - $brokerage),2)) FROM history WHERE history.playerid = users.id and transaction_type = 'Sell' GROUP BY history.playerid),0)");
-    	DB::statement("UPDATE `users` SET liquidcash = liquidcash - COALESCE((SELECT SUM(ROUND(amount * value * $brokerage,2)) FROM history WHERE history.playerid = users.id and (transaction_type = 'Cover' OR transaction_type = 'Short Sell') GROUP BY history.playerid),0)");
+    	DB::statement("UPDATE `users` SET liquidcash = '{$start_money}', marketvalue = 0 WHERE rank = 1");
+    	DB::statement("UPDATE `users` SET liquidcash = liquidcash - (SELECT SUM(amount * value * (1 + $brokerage)) FROM history WHERE history.playerid = users.id and transaction_type = 'Buy' GROUP BY history.playerid)");
+    	DB::statement("UPDATE `users` SET liquidcash = liquidcash + (SELECT SUM(amount * value * (1 - $brokerage)) FROM history WHERE history.playerid = users.id and transaction_type = 'Sell' GROUP BY history.playerid)");
+    	DB::statement("UPDATE `users` SET liquidcash = liquidcash - (SELECT SUM(amount * value * $brokerage) FROM history WHERE history.playerid = users.id and (transaction_type = 'Cover' OR transaction_type = 'Short Sell') GROUP BY history.playerid)");
 
-
-        DB::statement("INSERT INTO bought_stocks (SELECT playerid, symbol, SUM(amount) as amt, (SUM(ROUND(amount * value,2)) / SUM(amount)) as avg FROM history WHERE transaction_type = 'Buy' GROUP BY playerid, symbol)");
-        DB::statement("UPDATE bought_stocks dest, (SELECT playerid, symbol, SUM(amount) as amt, (SUM(ROUND(amount * value,2)) / SUM(amount)) as avg FROM history WHERE transaction_type = 'Sell' GROUP BY playerid, symbol) src SET dest.amount = dest.amount - src.amt, dest.avg = (dest.amount * dest.avg - src.amt * src.avg) / (dest.amount - src.amt) WHERE dest.playerid = src.playerid AND dest.symbol = src.symbol") ;
-        DB::statement("INSERT INTO short_sell (SELECT playerid, symbol, SUM(amount) as amt, (SUM(ROUND(amount * value,2)) / SUM(amount)) as avg FROM history WHERE transaction_type = 'Short Sell' GROUP BY playerid, symbol)");
-
-        DB::statement("UPDATE users dest, (SELECT playerid, symbol, SUM(amount) as amt, (SUM(ROUND(amount * value,2)) / SUM(amount)) as avg FROM history WHERE transaction_type = 'Cover' GROUP BY playerid, symbol) src, short_sell srcb SET dest.liquidcash = dest.liquidcash + ROUND((src.avg - srcb.avg) * src.amt,2) WHERE dest.id = src.playerid AND src.symbol = srcb.symbol AND src.playerid = srcb.playerid") ;
-
-        DB::statement("UPDATE short_sell dest, (SELECT playerid, symbol, SUM(amount) as amt, (SUM(ROUND(amount * value,2)) / SUM(amount)) as avg FROM history WHERE transaction_type = 'Cover' GROUP BY playerid, symbol) src SET dest.amount = dest.amount - src.amt, dest.avg = (dest.amount * dest.avg - src.amt * src.avg) / (dest.amount - src.amt) WHERE dest.playerid = src.playerid AND dest.symbol = src.symbol") ;
+        DB::statement("INSERT INTO bought_stocks (SELECT playerid, symbol, SUM(amount) as amt, (SUM(amount * value) / SUM(amount)) as avg FROM history WHERE transaction_type = 'Buy' GROUP BY playerid, symbol)");
+        DB::statement("UPDATE bought_stocks dest, (SELECT playerid, symbol, SUM(amount) as amt, (SUM(amount * value) / SUM(amount)) as avg FROM history WHERE transaction_type = 'Sell' GROUP BY playerid, symbol) src SET dest.amount = dest.amount - src.amt, dest.avg = (dest.amount * dest.avg - src.amt * src.avg) / (dest.amount - src.amt) WHERE dest.playerid = src.playerid AND dest.symbol = src.symbol") ;
+    	DB::statement("INSERT INTO short_sell (SELECT playerid, symbol, SUM(amount) as amt, (SUM(amount * value) / SUM(amount)) as value FROM history WHERE transaction_type = 'Short Sell' GROUP BY playerid, symbol)");
+        DB::statement("UPDATE users dest, (SELECT playerid, symbol, SUM(amount) as amt, (SUM(amount * value) / SUM(amount)) as value FROM history WHERE transaction_type = 'Cover' GROUP BY playerid, symbol) src, short_sell srcb SET dest.liquidcash = dest.liquidcash + (srcb.avg - src.value) * src.amt WHERE dest.id = src.playerid AND src.symbol = srcb.symbol AND dest.id = srcb.playerid") ;
+        DB::statement("UPDATE short_sell dest, (SELECT playerid, symbol, SUM(amount) as amt, (SUM(amount * value) / SUM(amount)) as value FROM history WHERE transaction_type = 'Cover' GROUP BY playerid, symbol) src SET dest.amount = dest.amount - src.amt, dest.avg = (dest.amount * dest.avg - src.amt * src.value) / (dest.amount - src.amt) WHERE dest.playerid = src.playerid AND dest.symbol = src.symbol") ;
         DB::statement("DELETE FROM `bought_stocks` WHERE amount = 0") ;
     	DB::statement("DELETE FROM `short_sell` WHERE amount = 0") ;
     	DB::statement("UPDATE `users` SET shortval = (SELECT SUM(amount * avg) FROM short_sell WHERE short_sell.playerid = users.id GROUP BY short_sell.playerid)") ;
@@ -85,7 +71,7 @@ class Simulate extends Command
     	DB::statement("UPDATE users SET marketvalue = (SELECT SUM(MarketVal.b_amount * MarketVal.value) + SUM(MarketVal.ss_amount * (MarketVal.ss_value - MarketVal.value)) from MarketVal WHERE MarketVal.id = users.id) WHERE rank = 1") ;
 
                 //$this->info("-->debug.");
-      });*/
+      });
 
       $this->info("Simulation Complete.");
 
